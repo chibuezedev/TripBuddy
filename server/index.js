@@ -6,14 +6,12 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { Configuration, OpenAIApi } from "openai";
 
+/* ROUTES IMPORTS */
+import aiRoutes from "./routes/ai.js";
+import authRoutes from "./routes/auth.js";
 import connection from "./configs/db.js";
 
-/* ROUTES IMPORTS */
-import openAiRoutes from "./routes/openai.js";
-import authRoutes from "./routes/auth.js";
-
 /* CONFIGURATIONS */
-
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -31,7 +29,7 @@ const configuration = new Configuration({
 export const openai = new OpenAIApi(configuration);
 
 /* ROUTES */
-app.use("/secure/api/openai", openAiRoutes);
+app.use("/secure/api/openai", aiRoutes);
 app.use("/secure/api/auth", authRoutes);
 
 /* SERVER SETUP */
