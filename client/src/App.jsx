@@ -10,14 +10,16 @@ function App() {
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedSecret = localStorage.getItem("token");
-    if (savedUser && savedSecret) {
+    // if (savedUser && savedSecret) {
+    //   setUser(savedUser);
+    //   setSecret(savedSecret);
+    // }
+    if (savedUser) {
       setUser(savedUser);
-      setSecret(savedSecret);
     }
   }, []);
-console.log("user token", secret)
-console.log("User saved", user)
   const isAuth = Boolean(user) && Boolean(secret);
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -36,7 +38,7 @@ console.log("User saved", user)
             path="/chat"
             element={
               isAuth ? (
-                <Chat user={user} secret={secret}/>
+                <Chat user={user} secret={secret} />
               ) : (
                 <Navigate to="/" />
               )

@@ -65,9 +65,8 @@ const Login = ({ setUser, setSecret }) => {
         response = await login({ email, password });
         if (response.status === 200) {
           if (response.token) {
+            localStorage.setItem("user", response.user.username);
             localStorage.setItem("token", response.token);
-            const user = localStorage.setItem("user", response.user);
-            console.log("local user", user);
             setUser(response.user.username);
             setSecret(response.token);
             navigate("/chat");
@@ -85,6 +84,7 @@ const Login = ({ setUser, setSecret }) => {
       toast.error(err.error);
     }
   };
+
 
   return (
     <div className="login-page">
