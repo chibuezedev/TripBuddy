@@ -15,7 +15,7 @@ const Chat = ({ user, secret }) => {
   const chatProps = useMultiChatLogic(
     import.meta.env.VITE_PROJECT_ID,
     user,
-    secret = "test123"
+    (secret = import.meta.env.VITE_USER_SECRET)
   );
 
   return (
@@ -27,7 +27,14 @@ const Chat = ({ user, secret }) => {
         renderChatHeader={(chat) => <Header chat={chat} />}
         renderMessageForm={(props) => {
           if (chatProps.chat?.title.startsWith("AiChat_")) {
-            return <Ai props={props} activeChat={chatProps.chat} />;
+            return (
+              <Ai
+                props={props}
+                activeChat={chatProps.chat}
+                userName={user}
+                userSecret={secret}
+              />
+            );
           }
           if (chatProps.chat?.title.startsWith("AiCode_")) {
             return <AiCode props={props} activeChat={chatProps.chat} />;
@@ -36,7 +43,14 @@ const Chat = ({ user, secret }) => {
             return <AiAssist props={props} activeChat={chatProps.chat} />;
           }
           if (chatProps.chat?.title.startsWith("TripBuddyAI")) {
-            return <TripBuddyAI props={props} activeChat={chatProps.chat} />;
+            return (
+              <TripBuddyAI
+                props={props}
+                activeChat={chatProps.chat}
+                userName={user}
+                userSecret={secret}
+              />
+            );
           }
 
           return (

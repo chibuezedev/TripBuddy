@@ -1,4 +1,5 @@
 import { openai } from "../index.js";
+import axios from "axios";
 
 const systemMessage = `You are a knowledgeable and helpful travel assistant. You can discuss general topics, answer travel-related questions, and provide personalized travel suggestions. When discussing travel, always consider the user's budget, available time, priorities, and preferences. Suggest specific locations and provide links to relevant tourist platforms. Advise on the best time to travel for optimal experiences.`;
 
@@ -6,7 +7,7 @@ let conversationHistory = [];
 
 export const generateText = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { text, activeChatId, userName, userSecret } = req.body;
 
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
@@ -15,6 +16,18 @@ export const generateText = async (req, res) => {
         { role: "user", content: text },
       ],
     });
+
+    await axios.post(
+      `https://api.chatengine.io/chats/${activeChatId}/messages/`,
+      { text: response.data.choices[0].message.content },
+      {
+        headers: {
+          "Project-ID": process.env.PROJECT_ID,
+          "User-Name": userName,
+          "User-Secret": userSecret,
+        },
+      }
+    );
 
     res.status(200).json({ text: response.data.choices[0].message.content });
   } catch (error) {
@@ -73,7 +86,6 @@ export const chatWithAssistant = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Add user's message to conversation history
     conversationHistory.push({ role: "user", content: message });
 
     const response = await openai.createChatCompletion({
@@ -87,10 +99,8 @@ export const chatWithAssistant = async (req, res) => {
 
     const assistantReply = response.data.choices[0].message.content;
 
-    // Add assistant's reply to conversation history
     conversationHistory.push({ role: "assistant", content: assistantReply });
 
-    // Trim conversation history if it gets too long
     if (conversationHistory.length > 10) {
       conversationHistory = conversationHistory.slice(-10);
     }
@@ -128,6 +138,17 @@ export const getTravelSuggestion = async (req, res) => {
       max_tokens: 500,
     });
 
+    await axios.post(
+      `https://api.chatengine.io/chats/${activeChatId}/messages/`,
+      { text: response.data.choices[0].message.content },
+      {
+        headers: {
+          "Project-ID": process.env.PROJECT_ID,
+          "User-Name": userName,
+          "User-Secret": userSecret,
+        },
+      }
+    );
     const suggestion = response.data.choices[0].message.content;
 
     res.status(200).json({ suggestion });

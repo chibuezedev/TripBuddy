@@ -1,11 +1,11 @@
-import { usePostAiTextMutation } from "@/state/api";
+import { usePostTripBuddyAiMutation } from "@/state/api";
 import React, { useState } from "react";
 import MessageFormUI from "./MessageFormUI";
 
-const TripBuddyAI = ({ props, activeChat }) => {
+const TripBuddyAI = ({ props, activeChat, userName, userSecret }) => {
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState("");
-  const [trigger] = usePostAiTextMutation();
+  const [trigger] = usePostTripBuddyAiMutation();
 
   const handleChange = (e) => setMessage(e.target.value);
 
@@ -21,6 +21,8 @@ const TripBuddyAI = ({ props, activeChat }) => {
       sender_username: props.username,
       text: message,
       activeChatId: activeChat.id,
+      userName: userName,
+      userSecret: userSecret,
     };
 
     props.onSubmit(form);
