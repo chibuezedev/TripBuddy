@@ -86,7 +86,6 @@ export const chatWithAssistant = async (req, res) => {
   try {
     const { message } = req.body;
 
-    // Add user's message to conversation history
     conversationHistory.push({ role: "user", content: message });
 
     const response = await openai.createChatCompletion({
@@ -100,10 +99,8 @@ export const chatWithAssistant = async (req, res) => {
 
     const assistantReply = response.data.choices[0].message.content;
 
-    // Add assistant's reply to conversation history
     conversationHistory.push({ role: "assistant", content: assistantReply });
 
-    // Trim conversation history if it gets too long
     if (conversationHistory.length > 10) {
       conversationHistory = conversationHistory.slice(-10);
     }
