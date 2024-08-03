@@ -4,10 +4,7 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-      // Get the token from the state
       const token = getState().auth.token;
-
-      // If we have a token set in state
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
@@ -18,26 +15,6 @@ export const api = createApi({
   reducerPath: "main",
   tagTypes: ["User"],
   endpoints: (build) => ({
-    login: build.mutation({
-      query: (credentials) => ({
-        url: "auth/login",
-        method: "POST",
-        body: credentials,
-      }),
-      invalidatesTags: ["User"],
-    }),
-    signup: build.mutation({
-      query: (user) => ({
-        url: "auth/signup",
-        method: "POST",
-        body: user,
-      }),
-      invalidatesTags: ["User"],
-    }),
-    getProfile: build.query({
-      query: () => "auth/profile",
-      providesTags: ["User"],
-    }),
     postAiText: build.mutation({
       query: (payload) => ({
         url: "openai/text",
@@ -45,16 +22,9 @@ export const api = createApi({
         body: payload,
       }),
     }),
-    postAiCode: build.mutation({
+    postTripBuddyAi: build.mutation({
       query: (payload) => ({
-        url: "openai/code",
-        method: "POST",
-        body: payload,
-      }),
-    }),
-    postAiAssist: build.mutation({
-      query: (payload) => ({
-        url: "openai/assist",
+        url: "openai/suggestion",
         method: "POST",
         body: payload,
       }),
@@ -62,11 +32,4 @@ export const api = createApi({
   }),
 });
 
-export const {
-  useLoginMutation,
-  useSignupMutation,
-  useGetProfileQuery,
-  usePostAiTextMutation,
-  usePostAiCodeMutation,
-  usePostAiAssistMutation,
-} = api;
+export const { usePostAiTextMutation, usePostTripBuddyAiMutation } = api;
