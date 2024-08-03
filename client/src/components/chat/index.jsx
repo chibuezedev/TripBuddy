@@ -9,13 +9,13 @@ import StandardMessageForm from "@/components/customMessageForms/StandardMessage
 import Ai from "@/components/customMessageForms/Ai";
 import AiCode from "@/components/customMessageForms/AiCode";
 import AiAssist from "@/components/customMessageForms/AiAssist";
+import TripBuddyAI from "@/components/customMessageForms/TripBuddyAI";
 
-const Chat = ({ user, secret}) => {
-
+const Chat = ({ user, secret }) => {
   const chatProps = useMultiChatLogic(
-    user._id,
+    import.meta.env.VITE_PROJECT_ID,
     user,
-    secret
+    secret = "test123"
   );
 
   return (
@@ -34,6 +34,9 @@ const Chat = ({ user, secret}) => {
           }
           if (chatProps.chat?.title.startsWith("AiAssist_")) {
             return <AiAssist props={props} activeChat={chatProps.chat} />;
+          }
+          if (chatProps.chat?.title.startsWith("TripBuddyAI")) {
+            return <TripBuddyAI props={props} activeChat={chatProps.chat} />;
           }
 
           return (
