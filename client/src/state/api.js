@@ -36,6 +36,13 @@ export const api = createApi({
         body: payload,
       }),
     }),
+    postAiCode: build.mutation({
+      query: (payload) => ({
+        url: "openai/come",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -43,4 +50,5 @@ export const {
   usePostAiTextMutation,
   usePostTripBuddyAiMutation,
   usePostAiAssistantMutation,
+  usePostAiCodeMutation,
 } = api;
